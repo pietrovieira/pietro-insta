@@ -18,7 +18,7 @@ class Api::V1::PostsController < ApplicationController
   def create
     begin
       @post = Post.new(post_params)
-      uploads = Cloudinary::Uploader.upload(params[:photo])
+      uploads = Cloudinary::Uploader.upload("data:image/png;base64,#{params[:photo]}")
       @post.user_id = current_user.id # i think easy to solve the problem but i dont secure of the resolution.
       if @post.save
         @photo = Photo.new({
