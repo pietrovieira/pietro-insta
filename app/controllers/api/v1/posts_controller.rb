@@ -16,34 +16,38 @@ class Api::V1::PostsController < ApplicationController
 
   # POST /posts
   def create
-    @post = Post.new(post_params)
-    @post.user_id = current_user.id # i think easy to solve the problem but i dont secure of the resolution.
-    if @post.save
+    begin
+      @post = Post.new(post_params)
       uploads = Cloudinary::Uploader.upload(params[:photo])
-      @photo = Photo.new({
-          :post_id => @post.id,
-          :asset_id => uploads['asset_id'],
-          :public_id => uploads['public_id'], 
-          :version => uploads['version'], 
-          :version_id => uploads['version_id'], 
-          :signature => uploads['signature'], 
-          :width => uploads['width'], 
-          :height => uploads['height'], 
-          :format => uploads['format'], 
-          :resource_type => uploads['resource_type'], 
-          :tags => uploads['tags'], 
-          :bytes => uploads['bytes'], 
-          :etag => uploads['etag'], 
-          :placeholder => uploads['placeholder'], 
-          :url => uploads['url'], 
-          :secure_url => uploads['secure_url'], 
-          :api_key => uploads['api_key'], 
-      })
-      puts "uploadsuploadsuploadsuploads: #{@photo}"
-      @photo.save
-      render json: @post, status: :created
-    else
-      render json: @post.errors, status: :unprocessable_entity
+      @post.user_id = current_user.id # i think easy to solve the problem but i dont secure of the resolution.
+      if @post.save
+        @photo = Photo.new({
+            :post_id => @post.id,
+            :asset_id => uploads['asset_id'],
+            :public_id => uploads['public_id'], 
+            :version => uploads['version'], 
+            :version_id => uploads['version_id'], 
+            :signature => uploads['signature'], 
+            :width => uploads['width'], 
+            :height => uploads['height'], 
+            :format => uploads['format'], 
+            :resource_type => uploads['resource_type'], 
+            :tags => uploads['tags'], 
+            :bytes => uploads['bytes'], 
+            :etag => uploads['etag'], 
+            :placeholder => uploads['placeholder'], 
+            :url => uploads['url'], 
+            :secure_url => uploads['secure_url'], 
+            :api_key => uploads['api_key'], 
+        })
+        @photo.save
+        render json: @post, status: :created
+      else
+        render json: @post.errors, status: :unprocessable_entity
+      end
+    rescue StandardError => e
+      puts "Rescued: #{e.inspect}"
+      render json: {}, status: :not_modified
     end
   end
 

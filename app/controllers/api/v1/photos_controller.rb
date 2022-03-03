@@ -1,4 +1,4 @@
-class PhotosController < ApplicationController
+class Api::V1::PhotosController < ApplicationController
   before_action :set_photo, only: %i[ show update destroy ]
 
   # GET /photos

@@ -57,6 +57,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_01_181853) do
     t.string "signature"
     t.string "width"
     t.string "height"
+    t.string "mobile_width"
+    t.string "mobile_height"
     t.string "format"
     t.string "resource_type"
     t.string "tags"

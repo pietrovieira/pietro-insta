@@ -8,6 +8,8 @@ class CreatePhotos < ActiveRecord::Migration[7.0]
       t.string :signature
       t.string :width
       t.string :height
+      t.string :mobile_width
+      t.string :mobile_height
       t.string :format
       t.string :resource_type
       t.string :tags
